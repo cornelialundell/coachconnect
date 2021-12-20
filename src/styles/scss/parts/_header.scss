@@ -1,0 +1,28 @@
+nav {
+    position: fixed;
+    width: 100vw;
+    padding: 2rem 3rem 0;
+    z-index: 99;
+
+    img {
+        width: 150px;
+    }
+
+    ul {
+        list-style: none;
+
+        li {
+            padding: 0 2rem;
+        }
+
+        a {
+            color: white;
+        }
+    }
+}
+
+.signin {
+    a {
+        color: #362E74;
+    }
+}

@@ -1,0 +1,29 @@
+.justify {
+    &-start {
+        justify-content: start;
+    }
+    &-center {
+        justify-content: center;
+    }
+    &-end {
+        justify-content: flex-end;
+    }
+    &-between {
+        justify-content: space-between;
+    }
+    &-around {
+        justify-content: space-around;
+    }
+}
+
+.align-items {
+    &-center {
+        align-items: center;
+    }
+    &-start {
+        align-items:flex-start
+    }
+    &-end {
+        align-items: flex-end;
+    }
+}

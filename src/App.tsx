@@ -1,25 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import { LandingPage } from "./components/landingPage/LandingPage";
+import { Header } from "./components/header/Header";
+import { SignIn } from "./components/signIn/SignIn";
+import Cookies from "universal-cookie";
+import { Dashboard } from "./components/dashboard/Dashboard";
+
+export interface IClient {
+  name: string;
+}
+
+export interface ServiceResponse<T> {
+  data: T;
+}
 
 function App() {
+  const cookies = new Cookies();
+  const [cookie, setCookie] = useState(cookies.get('Authorization'));
+
+
+  const checkCookie = () => {
+    setCookie(cookies.get("Authorization"));
+  }
+
+  useEffect(() => {
+    setCookie(cookies.get("Authorization"));
+  }, [cookie]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <Routes>
+        {console.log("cookie " + cookie)}
+        {cookie ? (
+          <Route path="/" element={<Dashboard />} />
+        ) : (
+          <Route path="/" element={<LandingPage />} />
+        )}
+
+        <Route path="/signin" element={<SignIn checkCookie={checkCookie}/>} />
+      </Routes>
+    </>
   );
 }
 

@@ -1,0 +1,15 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+@for $i from 1 through 12 {
+    .col-#{$i} {
+        width: 100% / (12 / $i);
+    }
+}

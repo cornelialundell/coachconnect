@@ -1,0 +1,20 @@
+.third-purple {
+  background-color: #fff;
+  position: relative;
+  min-height: 100vh;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40vw;
+    height: 100%;
+    background-image: linear-gradient(#6c5ce7, #362e74);
+  }
+
+  > div {
+    position: relative;
+    z-index: 1;
+  }
+}

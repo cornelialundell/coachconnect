@@ -1,0 +1,13 @@
+.p {
+    &-h {
+        &-1 {
+            padding-block: 2rem;
+        }
+    }
+
+    &-t {
+        &-2 {
+            padding-top: 2rem;
+        }
+    }
+}

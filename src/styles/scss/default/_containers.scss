@@ -1,0 +1,25 @@
+
+
+.container {
+    &-medium {
+        max-width: 1400px;
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    &-big {
+        max-width: 1800px;
+        width: 95%;
+        margin: 0 auto;
+    }
+}
+
+.full-height {
+    min-height: 100vh;
+}
+
+.bg {
+    &-linear {
+        background-image: linear-gradient(#6c5ce7, #362e74);
+    }
+}
