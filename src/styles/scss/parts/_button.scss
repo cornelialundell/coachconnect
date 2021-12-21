@@ -1,3 +1,5 @@
+@import '../default/variables';
+
 .btn {
   font-size: 2rem;
   width: fit-content;
@@ -16,7 +18,7 @@
 
 .purple-btn {
   background-color: #6c5ce7;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: $box-shadow;
   padding: 1.5rem;
   min-width: 200px;
   border: none;

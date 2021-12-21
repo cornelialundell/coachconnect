@@ -1,3 +1,5 @@
+@import '../default/variables';
+
 .third-purple {
   background-color: #fff;
   position: relative;
@@ -11,6 +13,7 @@
     width: 40vw;
     height: 100%;
     background-image: linear-gradient(#6c5ce7, #362e74);
+    box-shadow: $box-shadow;
   }
 
   > div {

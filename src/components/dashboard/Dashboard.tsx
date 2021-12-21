@@ -8,6 +8,7 @@ export const Dashboard = () => {
     let userFromLS: IUser = JSON.parse(localStorage.getItem("user") || "");
     setUser(userFromLS);
   }, []);
+  
   return (
     <section className="bg-linear full-height row align-items-center">
       <div className="container-medium row">

@@ -17,29 +17,38 @@ export interface ServiceResponse<T> {
 
 function App() {
   const cookies = new Cookies();
-  const [cookie, setCookie] = useState(cookies.get('Authorization'));
-
+  const [cookie, setCookie] = useState(cookies.get("Authorization"));
+  const [url, setUrl] = useState('')
 
   const checkCookie = () => {
     setCookie(cookies.get("Authorization"));
+  };
+
+  const checkUrl = () => {
+    let currUrl = window.location.pathname;
+    if( currUrl.charAt( 0 ) === '/' ){
+      currUrl = currUrl.slice( 1 );
+    }
+    setUrl(currUrl)
   }
+
 
   useEffect(() => {
     setCookie(cookies.get("Authorization"));
-  }, [cookie]);
+    checkUrl();
+  }, [cookie, url]);
 
   return (
     <>
-      <Header />
+      <Header url={url} cookie={cookie} checkCookie={checkCookie}/>
       <Routes>
-        {console.log("cookie " + cookie)}
         {cookie ? (
           <Route path="/" element={<Dashboard />} />
         ) : (
           <Route path="/" element={<LandingPage />} />
         )}
 
-        <Route path="/signin" element={<SignIn checkCookie={checkCookie}/>} />
+        <Route path="/signin" element={<SignIn checkCookie={checkCookie} />} />
       </Routes>
     </>
   );

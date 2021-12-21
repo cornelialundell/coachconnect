@@ -1,35 +1,45 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import Cookies from "universal-cookie";
 import Logo from "./../../img/Logo.svg";
 
-export const Header = () => {
-  let [url, setUrl] = useState('')
+interface IHeaderProps {
+  url: string;
+  cookie: string;
+  checkCookie(): void;
+}
+export const Header = (props: IHeaderProps) => {
+  const navigate = useNavigate(); 
+  const cookies = new Cookies();
 
-  useEffect(() => {
-    let currUrl = window.location.pathname;
-    if( currUrl.charAt( 0 ) === '/' ){
-      currUrl = currUrl.slice( 1 );
-    }
-    setUrl(currUrl)
-  },[url])
-
+  const signOut = () => {
+    cookies.remove('Authorization');
+    localStorage.removeItem("user");
+    props.checkCookie();
+  }
   return (
-
-    <nav className={"row " + url} >
+    <nav className={"row " + props.url}>
       <div className="col-6">
-        <img src={Logo} />
+        <img src={Logo} onClick={() => navigate("/")} />
       </div>
       <div className="col-6 row justify-end">
-          <ul className="row">
-              <li>
-                  <a>Sign up</a>
-              </li>
-              <li>
-                  <a>About</a>
-              </li>
-              <li>
-                  <a>Pricing</a>
-              </li>
-          </ul>
+        <ul className="row">
+          <li>
+            <a tabIndex={1}>About</a>
+          </li>
+          <li>
+            <a tabIndex={2}>Pricing</a>
+          </li>
+          {props.cookie ? (
+            <li>
+              <a onClick={signOut} tabIndex={3} onKeyPressCapture={signOut}>Sign out</a>
+            </li>
+          ) : (
+            <li>
+            <a tabIndex={3}>Sign up</a>
+          </li>
+          )}
+        </ul>
       </div>
     </nav>
   );

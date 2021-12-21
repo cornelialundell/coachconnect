@@ -17,12 +17,11 @@
 
 :root {
   font-size: 10px;
-  --var-purple: #6C5CE7;
-  --var-purple-dark: #362E74;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
+  background-color: #f7f7f7;
 }
 
 img {
