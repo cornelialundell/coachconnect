@@ -15,7 +15,9 @@ h2 {
 h3 {
     font-size: 4rem;
 }
-h4 {}
+h4 {
+    font-size: 3rem;
+}
 h5 {}
 h6 {}
 
@@ -80,5 +82,11 @@ a {
         background-color: $purple;
         bottom: 0;
         left: 0px;
+    }
+}
+
+.align {
+    &-center {
+        text-align: center;
     }
 }

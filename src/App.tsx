@@ -40,7 +40,7 @@ function App() {
 
   return (
     <>
-      <Header url={url} cookie={cookie} checkCookie={checkCookie}/>
+      <Header url={url} checkUrl={checkUrl} cookie={cookie} checkCookie={checkCookie}/>
       <Routes>
         {cookie ? (
           <Route path="/" element={<Dashboard />} />

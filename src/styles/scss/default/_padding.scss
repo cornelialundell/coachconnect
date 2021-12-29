@@ -1,13 +1,32 @@
 .p {
-    &-h {
-        &-1 {
-            padding-block: 2rem;
-        }
+  // PADDINING
+  @for $i from 1 through 6 {
+    &-#{$i} {
+      padding:(1rem * $i);
     }
-
-    &-t {
-        &-2 {
-            padding-top: 2rem;
-        }
+    //   HORIZONTALLY
+    &-h-#{$i} {
+      padding: 0 (1rem * $i);
     }
+    // VERTICALLY
+    &-v-#{$i} {
+      padding: (1rem * $i) 0;
+    }
+    //TOP
+    &-t-#{$i} {
+      padding-top: (1rem * $i);
+    }
+    //BOTTOM
+    &-b-#{$i} {
+      padding-bottom: (1rem * $i);
+    }
+    //LEFT
+    &-l-#{$i} {
+      padding-left: (1rem * $i);
+    }
+    //RIGHT
+    &-right-#{$i} {
+      padding-right: (1rem * $i);
+    }
+  }
 }

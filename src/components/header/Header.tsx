@@ -8,10 +8,12 @@ interface IHeaderProps {
   url: string;
   cookie: string;
   checkCookie(): void;
+  checkUrl(): void;
 }
 export const Header = (props: IHeaderProps) => {
   const navigate = useNavigate(); 
   const cookies = new Cookies();
+
 
   const signOut = async () => {
     cookies.remove('Authorization');
@@ -22,7 +24,7 @@ export const Header = (props: IHeaderProps) => {
   return (
     <nav className={"row " + props.url}>
       <div className="col-6">
-        <img src={Logo} onClick={() => navigate("/")} />
+        <img src={Logo} onClick={() => {navigate("/"); props.checkUrl()}} />
       </div>
       <div className="col-6 row justify-end">
         <ul className="row">
@@ -38,7 +40,7 @@ export const Header = (props: IHeaderProps) => {
             </li>
           ) : (
             <li>
-            <a tabIndex={3}>Sign up</a>
+            <a tabIndex={3} href="/register">Sign up</a>
           </li>
           )}
         </ul>

@@ -7,6 +7,7 @@
 @use 'default/padding';
 @use 'parts/button';
 @use 'parts/header';
+@use 'parts/hero';
 @use 'parts/third-purple';
 * {
   margin: 0;

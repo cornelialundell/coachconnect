@@ -3,19 +3,21 @@ import { useNavigate } from "react-router-dom";
 import * as api from "../../services/user";
 import Cookies from "universal-cookie";
 import { ISignProps } from "./SignInRegister";
-import { auth } from "../../firebase-config";
+import { auth, db } from "../../firebase-config";
 import { signInWithEmailAndPassword } from "@firebase/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export interface IUser {
-  email: string | null,
-  token: string | null | undefined
+  id: string;
+  email: string | null;
+  name?: string | undefined | null;
 }
 
 export const SignInForm = (props: ISignProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<IUser>();
-  const [token, setToken] = useState<string | undefined>('')
+  const [token, setToken] = useState<string | undefined>("");
   const navigate = useNavigate();
   const cookies = new Cookies();
 
@@ -23,21 +25,36 @@ export const SignInForm = (props: ISignProps) => {
     e.preventDefault();
     try {
       const resp = await signInWithEmailAndPassword(auth, email, password);
-      setToken(await auth.currentUser?.getIdToken())
-
+      setToken(await auth.currentUser?.getIdToken());
       setUser({
+        email: resp.user.email,
+        id: resp.user.uid,
+      });
+
+      //test
+      const q = query(
+        collection(db, "coaches"),
+        where("coachId", "==", resp.user.uid)
+      );
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.docs.map((doc) => {
+        setUser({
           email: resp.user.email,
-          token: token
-      }
-      )
-  } catch (error) {console.log(error)}
+          name: doc.data().name,
+          id: doc.data().coachId,
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     navigate("/");
   };
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
-    cookies.set("Authorization", token)
+    cookies.set("Authorization", token);
     props.checkCookie();
   }, [user]);
 

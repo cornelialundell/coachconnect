@@ -32,6 +32,7 @@ export const SignIn = (props: ISignProps) => {
         ) : (
           <div className="col-7">
             <h3 className="clr-purple">Register</h3>
+            <p>Let’s get you all set up so you can verify your personal account and begin setting up your profile.</p>
             <RegisterForm checkCookie={props.checkCookie}/>
             <p className="p-t-2">
               Already have an account?{" "}
