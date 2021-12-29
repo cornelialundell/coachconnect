@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IUser } from "../signIn/SignInForm";
+import { IUser } from "../signInRegister/SignInForm";
 
 export const Dashboard = () => {
   let [user, setUser] = useState<IUser>();
@@ -12,7 +12,7 @@ export const Dashboard = () => {
   return (
     <section className="bg-linear full-height row align-items-center">
       <div className="container-medium row">
-        <h2>Välkommen <span className="underline">{user?.name}</span></h2>
+        <h2>Välkommen <span className="underline">{user?.email}</span></h2>
       </div>
     </section>
   );

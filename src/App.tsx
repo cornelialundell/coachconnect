@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { LandingPage } from "./components/landingPage/LandingPage";
 import { Header } from "./components/header/Header";
-import { SignIn } from "./components/signIn/SignIn";
+import { SignIn } from "./components/signInRegister/SignInRegister";
 import Cookies from "universal-cookie";
 import { Dashboard } from "./components/dashboard/Dashboard";
 
@@ -49,6 +49,7 @@ function App() {
         )}
 
         <Route path="/signin" element={<SignIn checkCookie={checkCookie} />} />
+        <Route path="/register" element={<SignIn checkCookie={checkCookie} />} />
       </Routes>
     </>
   );

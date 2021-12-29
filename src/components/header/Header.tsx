@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Cookies from "universal-cookie";
+import { auth } from "../../firebase-config";
 import Logo from "./../../img/Logo.svg";
 
 interface IHeaderProps {
@@ -12,9 +13,10 @@ export const Header = (props: IHeaderProps) => {
   const navigate = useNavigate(); 
   const cookies = new Cookies();
 
-  const signOut = () => {
+  const signOut = async () => {
     cookies.remove('Authorization');
     localStorage.removeItem("user");
+    await auth.signOut()
     props.checkCookie();
   }
   return (
