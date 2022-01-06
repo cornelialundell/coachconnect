@@ -25,7 +25,7 @@ export const RegisterForm = (props: ISignProps) => {
       setUser({
         email: resp.user.email,
         id: resp.user.uid,
-        name: username
+        name: username,
       });
       
       await addDoc(usersCollectionRef, {name: username, coachId: resp.user.uid})

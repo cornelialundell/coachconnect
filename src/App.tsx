@@ -6,14 +6,10 @@ import { Header } from "./components/header/Header";
 import { SignIn } from "./components/signInRegister/SignInRegister";
 import Cookies from "universal-cookie";
 import { Dashboard } from "./components/dashboard/Dashboard";
+import { ClientInfo } from "./components/clientInfo/ClientInfo";
+import { DefaultTemplate } from "./components/defaultTemplate/DefaultTemplate";
 
-export interface IClient {
-  name: string;
-}
 
-export interface ServiceResponse<T> {
-  data: T;
-}
 
 function App() {
   const cookies = new Cookies();
@@ -50,6 +46,7 @@ function App() {
 
         <Route path="/signin" element={<SignIn checkCookie={checkCookie} />} />
         <Route path="/register" element={<SignIn checkCookie={checkCookie} />} />
+        <Route path="/defaultTemplate" element={<DefaultTemplate/>} />
       </Routes>
     </>
   );

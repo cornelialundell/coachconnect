@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as api from "../../services/user";
 import Cookies from "universal-cookie";
 import { ISignProps } from "./SignInRegister";
 import { auth, db } from "../../firebase-config";
@@ -8,9 +7,9 @@ import { signInWithEmailAndPassword } from "@firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 export interface IUser {
-  id: string;
   email: string | null;
   name?: string | undefined | null;
+  id?: string
 }
 
 export const SignInForm = (props: ISignProps) => {
