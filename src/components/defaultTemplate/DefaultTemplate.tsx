@@ -8,6 +8,7 @@ import {
   setDoc,
   addDoc,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase-config";
@@ -58,6 +59,21 @@ export const DefaultTemplate = () => {
     getCoach();
   };
 
+
+  const editField = async (value:string, fieldId:string) => {
+    if (!id) return
+    const fieldDoc = doc(db, 'coaches', id, 'defaultTemplate', fieldId)
+    await deleteDoc(fieldDoc)
+    const usersCollectionRef = collection(
+      db,
+      "coaches",
+      id,
+      "defaultTemplate"
+    );
+    await addDoc(usersCollectionRef, { field: value });
+    getCoach();
+  };
+
   const addField = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!id) return
@@ -89,6 +105,7 @@ export const DefaultTemplate = () => {
               coachId={id}
               defaultTemplate={defaultTemplate}
               checkDefaultTemplate={checkDefaultTemplate}
+              editField={editField}
             />
           );
         })}

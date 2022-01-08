@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where, updateDoc, arrayUnion, setDoc, addDoc, doc, deleteDoc} from "firebase/firestore";
 import { auth, db } from "../../firebase-config";
 
@@ -9,6 +9,7 @@ interface IProps {
   coachId: string | null;
   defaultTemplate: Array<T>;
   checkDefaultTemplate():void
+  editField(value:string, id:string):void
 }
 
 interface T {
@@ -41,11 +42,14 @@ export const Fields = (props: IProps) => {
     await deleteDoc(fieldDoc)
 
 props.checkDefaultTemplate()
+
     
   }
 
-  const saveField = async () => {
-    console.log('save field')
+  const saveField = async (e: React.FormEvent) => {
+    e.preventDefault();
+    props.editField(newField, props.id)
+    setIsEdit(!isEdit)
   }
 
   useEffect(() => {
@@ -62,7 +66,7 @@ props.checkDefaultTemplate()
           <button onClick={deleteField}>Delete</button>
         </>
       ) : (
-        <form onSubmit={(e) => saveField()}>
+        <form onSubmit={(e) => saveField(e)}>
           <input
             type="text"
             placeholder={props.field}
