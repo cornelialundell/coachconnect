@@ -10,32 +10,56 @@ interface ICoach {
   email: string;
 }
 
+export interface ITemplate {
+  field: string
+}
+
 export interface IClient {
   name: string;
-  id: string;
   goals: string;
+  id: string;
+  template: ITemplate[]
 }
 export const Dashboard = () => {
   const coach = JSON.parse(localStorage.getItem("user") || "");
   const [clients, setClients] = useState<IClient[]>([]);
+  const [id, setId] = useState<string | null>(null)
   const navigate = useNavigate();
   const [selectedUser, setSelectedUser] = useState<IClient | null>(null)
 
-  const getUsers = async () => {
+  const getClients = async () => {
     const q = query(
       collection(db, "coaches"),
       where("coachId", "==", coach.id)
     );
     const querySnapshot = await getDocs(q);
     querySnapshot.docs.map((doc) => {
-      setClients(doc.data().clients);
+      setId(doc.id)
     });
+
+    if (id) {
+      const usersCollectionRef = collection(
+        db,
+        "coaches",
+        id,
+        "clients"
+      );
+
+      let list: IClient[] = [];
+      const orderedCollectionRef = query(usersCollectionRef);
+      const data = await getDocs(orderedCollectionRef);
+      data.docs.map((doc) => {
+        list.push({ name: doc.data().name, goals: doc.data().goals, template: doc.data().template, id: doc.id });
+        console.log(list)
+      });
+      setClients(list);
+    }
   };
 
 
   useEffect(() => {
-    getUsers();
-  }, []);
+    getClients();
+  }, [id]);
 
   if (selectedUser) {
     return (
@@ -57,7 +81,7 @@ export const Dashboard = () => {
           ) : (
             <h4>Dina kunder är:</h4>
           )}
-          {clients?.map((client, index) => {
+          {clients.map((client, index) => {
             return (
               <div key={index}>
                 <a

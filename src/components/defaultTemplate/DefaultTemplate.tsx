@@ -25,7 +25,7 @@ export const DefaultTemplate = () => {
   const [defaultTemplate, setDefaultTemplate] = useState<IDefaultTemplate[]>(
     []
   );
-  const [newField, setNewField] = useState('');
+  const [newField, setNewField] = useState("");
   const [id, setId] = useState<string | null>(null);
 
   const getCoach = async () => {
@@ -59,30 +59,18 @@ export const DefaultTemplate = () => {
     getCoach();
   };
 
-
-  const editField = async (value:string, fieldId:string) => {
-    if (!id) return
-    const fieldDoc = doc(db, 'coaches', id, 'defaultTemplate', fieldId)
-    await deleteDoc(fieldDoc)
-    const usersCollectionRef = collection(
-      db,
-      "coaches",
-      id,
-      "defaultTemplate"
-    );
-    await addDoc(usersCollectionRef, { field: value });
+  const editField = async (value: string, fieldId: string) => {
+    if (!id) return;
+    const fieldDoc = doc(db, "coaches", id, "defaultTemplate", fieldId);
+    const newFields = { field: value };
+    await updateDoc(fieldDoc, newFields);
     getCoach();
   };
 
   const addField = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!id) return
-    const usersCollectionRef = collection(
-      db,
-      "coaches",
-      id,
-      "defaultTemplate"
-    );
+    if (!id) return;
+    const usersCollectionRef = collection(db, "coaches", id, "defaultTemplate");
     await addDoc(usersCollectionRef, { field: newField });
     setNewField("");
     getCoach();
