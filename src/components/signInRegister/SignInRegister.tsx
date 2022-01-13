@@ -3,7 +3,7 @@ import { RegisterForm } from "./RegisterForm";
 import { SignInForm } from "./SignInForm";
 
 export interface ISignProps {
-  checkCookie(): void;
+  checkLoggedIn(): void;
 }
 export const SignIn = (props: ISignProps) => {
   const [url, setUrl] = useState("");
@@ -21,7 +21,7 @@ export const SignIn = (props: ISignProps) => {
         {url === "/signin" ? (
           <div className="col-7">
             <h3 className="clr-purple">Sign in</h3>
-            <SignInForm checkCookie={props.checkCookie} />
+            <SignInForm checkLoggedIn={props.checkLoggedIn} />
             <p className="p-t-2">
               Don't have an account?{" "}
               <a href="#" className="form-link">
@@ -33,7 +33,7 @@ export const SignIn = (props: ISignProps) => {
           <div className="col-7">
             <h3 className="clr-purple">Register</h3>
             <p>Let’s get you all set up so you can verify your personal account and begin setting up your profile.</p>
-            <RegisterForm checkCookie={props.checkCookie}/>
+            <RegisterForm checkLoggedIn={props.checkLoggedIn}/>
             <p className="p-t-2">
               Already have an account?{" "}
               <a href="#" className="form-link">

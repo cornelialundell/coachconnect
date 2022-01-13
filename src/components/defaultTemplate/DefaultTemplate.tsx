@@ -4,15 +4,11 @@ import {
   query,
   where,
   updateDoc,
-  arrayUnion,
-  setDoc,
   addDoc,
   doc,
-  deleteDoc,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { db } from "../../firebase-config";
-import { IUser } from "../signInRegister/SignInForm";
+import { auth, db } from "../../firebase-config";
 import { Fields } from "./Fields";
 
 export interface IDefaultTemplate {
@@ -27,32 +23,26 @@ export const DefaultTemplate = () => {
   );
   const [newField, setNewField] = useState("");
   const [id, setId] = useState<string | null>(null);
+  const userLoggedIn = auth.currentUser;
+
+
 
   const getCoach = async () => {
-    const q = query(
-      collection(db, "coaches"),
-      where("coachId", "==", coach.id)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.docs.map(async (doc) => {
-      setId(doc.id);
-    });
-
     let list: any = [];
-    if (id) {
-      const usersCollectionRef = collection(
-        db,
-        "coaches",
-        id,
-        "defaultTemplate"
-      );
-      const orderedCollectionRef = query(usersCollectionRef);
-      const data = await getDocs(orderedCollectionRef);
-      data.docs.map((doc) => {
-        list.push({ field: doc.data().field, id: doc.id });
-      });
-      setDefaultTemplate(list);
-    }
+
+    if (!userLoggedIn) return
+    const usersCollectionRef = collection(
+      db,
+      "coaches",
+      userLoggedIn?.uid,
+      "defaultTemplate"
+    );
+    const orderedCollectionRef = query(usersCollectionRef);
+    const data = await getDocs(orderedCollectionRef);
+    data.docs.map((doc) => {
+      list.push({ field: doc.data().field, id: doc.id });
+    });
+    setDefaultTemplate(list);
   };
 
   const checkDefaultTemplate = () => {
@@ -60,8 +50,8 @@ export const DefaultTemplate = () => {
   };
 
   const editField = async (value: string, fieldId: string) => {
-    if (!id) return;
-    const fieldDoc = doc(db, "coaches", id, "defaultTemplate", fieldId);
+    if (!userLoggedIn) return
+    const fieldDoc = doc(db, "coaches", userLoggedIn?.uid, "defaultTemplate", fieldId);
     const newFields = { field: value };
     await updateDoc(fieldDoc, newFields);
     getCoach();
@@ -69,8 +59,15 @@ export const DefaultTemplate = () => {
 
   const addField = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!id) return;
-    const usersCollectionRef = collection(db, "coaches", id, "defaultTemplate");
+    if (!userLoggedIn) return
+    const usersCollectionRef = collection(
+      db,
+      "coaches",
+      userLoggedIn?.uid,
+      "defaultTemplate"
+    );
+
+
     await addDoc(usersCollectionRef, { field: newField });
     setNewField("");
     getCoach();
@@ -78,7 +75,7 @@ export const DefaultTemplate = () => {
 
   useEffect(() => {
     getCoach();
-  }, [id]);
+  }, [userLoggedIn]);
   return (
     <section>
       <div className="container-medium ">
@@ -90,7 +87,7 @@ export const DefaultTemplate = () => {
               key={index}
               field={field.field}
               id={field.id}
-              coachId={id}
+              coachId={userLoggedIn?.uid}
               defaultTemplate={defaultTemplate}
               checkDefaultTemplate={checkDefaultTemplate}
               editField={editField}

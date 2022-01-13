@@ -8,16 +8,39 @@ import Cookies from "universal-cookie";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import { ClientInfo } from "./components/clientInfo/ClientInfo";
 import { DefaultTemplate } from "./components/defaultTemplate/DefaultTemplate";
+import { auth, db } from "./firebase-config";
+import { doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
+export interface ICoach {
+  username?: string;
+  email?: string;
+}
 
+export interface ICoachProps {
+  coach: ICoach | undefined
+}
 
 function App() {
   const cookies = new Cookies();
   const [cookie, setCookie] = useState(cookies.get("Authorization"));
   const [url, setUrl] = useState('')
+  const [coach, setCoach] = useState<ICoach>();
 
-  const checkCookie = () => {
-    setCookie(cookies.get("Authorization"));
+  const [userLoggedIn, setUserLoggedIn] = useState(auth.currentUser)
+
+  onAuthStateChanged(auth, (user) => {
+    if(user) {
+      console.log(user)
+      setUserLoggedIn(user)
+    } else {
+      console.log('no user exists');
+      
+    }
+  })
+
+  const checkLoggedIn= () => {
+    setUserLoggedIn(auth.currentUser)
   };
 
   const checkUrl = () => {
@@ -28,25 +51,40 @@ function App() {
     setUrl(currUrl)
   }
 
+  const getCoach = async () => {
+    if (!userLoggedIn) return;
+    const hej = doc(db, 'coaches', userLoggedIn.uid);
+    const hejjj = (await getDoc(hej)).data();
 
-  useEffect(() => {
-    setCookie(cookies.get("Authorization"));
-    checkUrl();
-  }, [cookie, url]);
+    if (hejjj) {
+      
+      setCoach({username: hejjj.username, email: hejjj.email})
+
+    }
+  }
+
+console.log('hej')
+
+useEffect(() => {
+  getCoach()
+}, [userLoggedIn])
+
+ 
 
   return (
     <>
-      <Header url={url} checkUrl={checkUrl} cookie={cookie} checkCookie={checkCookie}/>
+      <Header url={url} checkUrl={checkUrl} cookie={cookie} coach={coach} checkLoggedIn={checkLoggedIn}/>
       <Routes>
-        {cookie ? (
-          <Route path="/" element={<Dashboard />} />
+        {userLoggedIn ? (
+          <Route path="/" element={<Dashboard coach={coach}/>} />
         ) : (
           <Route path="/" element={<LandingPage />} />
         )}
 
-        <Route path="/signin" element={<SignIn checkCookie={checkCookie} />} />
-        <Route path="/register" element={<SignIn checkCookie={checkCookie} />} />
+        <Route path="/signin" element={<SignIn checkLoggedIn={checkLoggedIn}/>} />
+        <Route path="/register" element={<SignIn checkLoggedIn={checkLoggedIn} />} />
         <Route path="/defaultTemplate" element={<DefaultTemplate/>} />
+        <Route path="/clientinfo/:paramId" element={<ClientInfo/>} />
       </Routes>
     </>
   );

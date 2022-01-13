@@ -1,27 +1,39 @@
+import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Cookies from "universal-cookie";
+import { ICoach, ICoachProps } from "../../App";
 import { auth } from "../../firebase-config";
 import Logo from "./../../img/Logo.svg";
 
 interface IHeaderProps {
   url: string;
   cookie: string;
-  checkCookie(): void;
+  checkLoggedIn(): void;
   checkUrl(): void;
+  coach: ICoach | undefined
 }
 export const Header = (props: IHeaderProps) => {
   const navigate = useNavigate(); 
   const cookies = new Cookies();
 
+  const userLoggedIn = auth.currentUser
 
   const signOut = async () => {
-    cookies.remove('Authorization');
-    localStorage.removeItem("user");
     await auth.signOut()
-    props.checkCookie();
+    props.checkLoggedIn()
   }
+
+  // useEffect(() => {
+  //   setUserLoggedIn(auth.currentUser)
+  // }, [])
+
+
+
+
+
   return (
+ 
     <nav className={"row " + props.url}>
       <div className="col-6">
         <img src={Logo} onClick={() => {navigate("/"); props.checkUrl()}} />
@@ -34,7 +46,7 @@ export const Header = (props: IHeaderProps) => {
           <li>
             <a tabIndex={2}>Pricing</a>
           </li>
-          {props.cookie ? (
+          {userLoggedIn !== null ? (
             <li>
               <a onClick={signOut} tabIndex={3} onKeyPressCapture={signOut}>Sign out</a>
             </li>

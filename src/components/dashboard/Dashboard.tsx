@@ -1,47 +1,25 @@
 import { useEffect, useState } from "react";
-import { db } from "../../firebase-config";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from "../../firebase-config";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { useNavigate } from "react-router";
-import { ClientInfo } from "../clientInfo/ClientInfo";
+import { IClient } from "../clientInfo/ClientInfo";
+import { ICoachProps } from "../../App";
 
-interface ICoach {
-  name: string;
-  id: string;
-  email: string;
-}
 
-export interface ITemplate {
-  field: string
-}
 
-export interface IClient {
-  name: string;
-  goals: string;
-  id: string;
-  template: ITemplate[]
-}
-export const Dashboard = () => {
-  const coach = JSON.parse(localStorage.getItem("user") || "");
+export const Dashboard = (props: ICoachProps) => {
+  const [user, setUser] = useState(auth.currentUser);
+
   const [clients, setClients] = useState<IClient[]>([]);
-  const [id, setId] = useState<string | null>(null)
   const navigate = useNavigate();
-  const [selectedUser, setSelectedUser] = useState<IClient | null>(null)
+
 
   const getClients = async () => {
-    const q = query(
-      collection(db, "coaches"),
-      where("coachId", "==", coach.id)
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.docs.map((doc) => {
-      setId(doc.id)
-    });
-
-    if (id) {
+    if (!user) return;
       const usersCollectionRef = collection(
         db,
         "coaches",
-        id,
+        user.uid,
         "clients"
       );
 
@@ -50,28 +28,22 @@ export const Dashboard = () => {
       const data = await getDocs(orderedCollectionRef);
       data.docs.map((doc) => {
         list.push({ name: doc.data().name, goals: doc.data().goals, template: doc.data().template, id: doc.id });
-        console.log(list)
       });
       setClients(list);
-    }
   };
 
 
   useEffect(() => {
+    setUser(auth.currentUser)
     getClients();
-  }, [id]);
+  }, [user]);
 
-  if (selectedUser) {
-    return (
-      <ClientInfo client={selectedUser}/>
-    )
-  }
   return (
     <section className="bg-linear full-height row align-items-center">
       <div className="container-medium row justify-between">
         <div className="col-6">
           <h2>
-            Välkommen <span className="underline">{coach?.name}</span>
+            Välkommen <span className="underline">{props.coach?.username}</span>
           </h2>
         </div>
         <div className="col-6 bg-white p-4 box-shadow">
@@ -86,7 +58,7 @@ export const Dashboard = () => {
               <div key={index}>
                 <a
                   onClick={() => {
-                    setSelectedUser(client)
+                    navigate(`/clientinfo/${client.id}`)
                   }}
                 >
                   {client.name}

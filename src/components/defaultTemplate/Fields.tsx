@@ -6,7 +6,7 @@ import { auth, db } from "../../firebase-config";
 interface IProps {
   field: string;
   id: string;
-  coachId: string | null;
+  coachId: string | null | undefined;
   defaultTemplate: Array<T>;
   checkDefaultTemplate():void
   editField(value:string, id:string):void
@@ -23,17 +23,6 @@ export const Fields = (props: IProps) => {
   const [id, setId] = useState('')
 
 
-
-  const findUserInDb = async () => {
-      const q = query(
-        collection(db, "coaches"),
-        where("coachId", "==", coach.id)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.docs.map(async (doc) => {
-          setId(doc.id)
-      });
-  }
 
 
   const deleteField = async () => {
@@ -52,9 +41,6 @@ props.checkDefaultTemplate()
     setIsEdit(!isEdit)
   }
 
-  useEffect(() => {
-      findUserInDb();
-  }, [])
 
 
   return (

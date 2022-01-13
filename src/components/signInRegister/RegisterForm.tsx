@@ -3,7 +3,7 @@ import { addDoc, collection } from "@firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Cookies from "universal-cookie";
-import { auth, db } from "../../firebase-config";
+import { auth, createUserDocument, db } from "../../firebase-config";
 import { IUser } from "./SignInForm";
 import { ISignProps } from "./SignInRegister";
 
@@ -14,22 +14,27 @@ export const RegisterForm = (props: ISignProps) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [token, setToken] = useState<string | undefined>("");
-  const [user, setUser] = useState<IUser>();
+  const [currentUser, setUser] = useState<IUser>();
+  const defaultTemplateList = ['hunger', 'mood', 'sleep']
   const usersCollectionRef = collection(db, "coaches");
 
   const register = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const resp = await createUserWithEmailAndPassword(auth, email, password);
-      setToken(await auth.currentUser?.getIdToken())
+      const {user} = await createUserWithEmailAndPassword(auth, email, password);
       setUser({
-        email: resp.user.email,
-        id: resp.user.uid,
+        email: user.email,
+        id: user.uid,
         name: username,
       });
       
-      await addDoc(usersCollectionRef, {name: username, coachId: resp.user.uid})
+        await createUserDocument(user, username);
+        const templateRef = collection(db, 'coaches', user.uid, 'defaultTemplate')
 
+        defaultTemplateList.map(async (item) => {
+          await addDoc(templateRef, { field: item });
+        })
+      
     } catch (error) {
       console.log(error);
     }
@@ -37,10 +42,10 @@ export const RegisterForm = (props: ISignProps) => {
   };
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(currentUser));
     cookies.set("Authorization", token);
-    props.checkCookie();
-  }, [user]);
+    props.checkLoggedIn();
+  }, [currentUser]);
 
   return (
     <form className="row justify-between" onSubmit={(e) => register(e)}>

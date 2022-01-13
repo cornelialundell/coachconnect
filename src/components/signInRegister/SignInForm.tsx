@@ -10,6 +10,7 @@ export interface IUser {
   email: string | null;
   name?: string | undefined | null;
   id?: string
+  uid?: string
 }
 
 export const SignInForm = (props: ISignProps) => {
@@ -30,18 +31,19 @@ export const SignInForm = (props: ISignProps) => {
         id: resp.user.uid,
       });
 
-      //test
       const q = query(
         collection(db, "coaches"),
         where("coachId", "==", resp.user.uid)
       );
       const querySnapshot = await getDocs(q);
 
+
       querySnapshot.docs.map((doc) => {
         setUser({
           email: resp.user.email,
           name: doc.data().name,
           id: doc.data().coachId,
+          uid: doc.id
         });
       });
     } catch (error) {
@@ -54,7 +56,7 @@ export const SignInForm = (props: ISignProps) => {
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
     cookies.set("Authorization", token);
-    props.checkCookie();
+    props.checkLoggedIn();
   }, [user]);
 
   return (
