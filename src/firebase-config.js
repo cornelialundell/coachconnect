@@ -40,7 +40,7 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import { getAuth } from "firebase/auth";
-import { addDoc, getFirestore } from "firebase/firestore";
+import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -69,6 +69,35 @@ export const createUserDocument = async (user, username) => {
         email,
         username,
       });
+    
+    } catch (error) {
+      console.log("Error in creating user", error);
+    }
+  }
+};
+export const createClientDocument = async (user, coachId,email, name, goals) => {
+  if (!user) return;
+  let template = [];
+  const userRef = firestore.doc(`coaches/${coachId.paramId}/clients/${user.uid}`);
+
+  const querySnapshot = await getDocs(collection(db, 'coaches', coachId.paramId, 'defaultTemplate'));
+  querySnapshot.forEach((doc) => {
+    template.push(doc.data())
+  });
+  const templateRef = collection(db, 'coaches', coachId.paramId, 'clients', user.uid, 'template')
+const snapshot = await userRef.get();
+  if (!snapshot.exists) {
+    const { email } = user;
+    try {
+      await userRef.set({
+        email,
+        name,
+        goals
+      });
+
+      template.map(async (item) => {
+            await addDoc(templateRef, {field: item})
+          })
     
     } catch (error) {
       console.log("Error in creating user", error);

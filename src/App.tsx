@@ -31,11 +31,7 @@ function App() {
 
   onAuthStateChanged(auth, (user) => {
     if(user) {
-      console.log(user)
       setUserLoggedIn(user)
-    } else {
-      console.log('no user exists');
-      
     }
   })
 
@@ -63,8 +59,6 @@ function App() {
     }
   }
 
-console.log('hej')
-
 useEffect(() => {
   getCoach()
 }, [userLoggedIn])
@@ -83,6 +77,7 @@ useEffect(() => {
 
         <Route path="/signin" element={<SignIn checkLoggedIn={checkLoggedIn}/>} />
         <Route path="/register" element={<SignIn checkLoggedIn={checkLoggedIn} />} />
+        <Route path="/register/:paramId" element={<SignIn checkLoggedIn={checkLoggedIn} />} />
         <Route path="/defaultTemplate" element={<DefaultTemplate/>} />
         <Route path="/clientinfo/:paramId" element={<ClientInfo/>} />
       </Routes>

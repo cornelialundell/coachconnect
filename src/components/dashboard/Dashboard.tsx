@@ -9,9 +9,11 @@ import { ICoachProps } from "../../App";
 
 export const Dashboard = (props: ICoachProps) => {
   const [user, setUser] = useState(auth.currentUser);
-
+  const [showInviteLink, setShowInviteLink] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
   const [clients, setClients] = useState<IClient[]>([]);
   const navigate = useNavigate();
+  const textToCopy = `localhost:3000/register/${user?.uid}`
 
 
   const getClients = async () => {
@@ -47,7 +49,21 @@ export const Dashboard = (props: ICoachProps) => {
           </h2>
         </div>
         <div className="col-6 bg-white p-4 box-shadow">
+          <div className="row justify-between">
           <button className="purple-btn" onClick={() => {navigate("/defaultTemplate")}}>Edit default template</button>
+          <button className="purple-btn" onClick={() => {setShowInviteLink(!showInviteLink)}}>Invite customers</button>
+          {showInviteLink ? (
+            <div className="row">
+              <p>{textToCopy}</p>
+              <button onClick={() => {navigator.clipboard.writeText(textToCopy); setIsCopied(true); setTimeout(() => setIsCopied(false), 2000)}}>Copy</button>
+              {isCopied ? (
+                <p>Copied!</p>
+              ): (<></>)}
+              </div>
+          ):(
+            <></>
+          )}
+          </div>
           {clients?.length === 0 ? (
             <h4>Du har inga kunder</h4>
           ) : (
