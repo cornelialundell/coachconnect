@@ -1,96 +1,106 @@
-@import './variables';
+@import "./variables";
 
 h1 {
-    font-size: 7rem;
-    line-height: 1.1;
+  font-size: 7rem;
+  line-height: 1.1;
 
-    @media screen and (min-width: 1500px) {
-        font-size: 10rem;
-      }
+  @media screen and (min-width: 1500px) {
+    font-size: 10rem;
+  }
 }
 h2 {
-    color: $white;
-    font-size: 5rem;
+  color: $white;
+  font-size: 5rem;
 }
 h3 {
-    font-size: 4rem;
+  font-size: 4rem;
 }
 h4 {
-    font-size: 3rem;
+  font-size: 3rem;
 }
-h5 {}
-h6 {}
-
+h5 {
+}
+h6 {
+}
 
 p {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 a {
-    font-size: 1.5rem;
-    text-decoration: none;
-    color: $purple;
-    position: relative;
-    cursor: pointer;
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: $purple;
+  position: relative;
+  cursor: pointer;
 
-    @media screen and (min-width: 1500px) {
-        font-size: 2.5rem;
-      }
+  @media screen and (min-width: 1500px) {
+    font-size: 2.5rem;
+  }
 
-      &:after {
-        content: '';
-        width: 0%;
-        height: 3px;
-        background-color: $purple;
-        position: absolute;
-        top: 105%;
-        left: 0;
-        transition: width .5s ease;
-        -webkit-transition: width .5s ease;
-        -moz-transition: width .5s ease;
-        -ms-transition: width .5s ease;
-        -o-transition: width .5s ease;
-}
+  &:after {
+    content: "";
+    width: 0%;
+    height: 3px;
+    background-color: $purple;
+    position: absolute;
+    top: 105%;
+    left: 0;
+    transition: width 0.5s ease;
+    -webkit-transition: width 0.5s ease;
+    -moz-transition: width 0.5s ease;
+    -ms-transition: width 0.5s ease;
+    -o-transition: width 0.5s ease;
+  }
 
-      &:hover, &:focus {
-    
-          &:after {
-            width: 100%;
-          }
-      }
+  &:hover,
+  &:focus {
+    &:after {
+      width: 100%;
+    }
+  }
 }
 
 .clr {
-    &-white {
-        color: $white;
-    }
+  &-white {
+    color: $white;
+  }
 
-    &-purple {
-        color: $purple;
-    }
+  &-purple {
+    color: $purple;
+  }
 
-    &-danger {
-        color: $danger;
-    }
+  &-danger {
+    color: $danger;
+  }
+  &-yellow {
+    color: $yellow;
+  }
 }
 
 .underline {
-    position: relative;
-    text-transform: capitalize;
+  position: relative;
+  text-transform: capitalize;
 
-    &:after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 8px;
-        background-color: $purple;
-        bottom: 0;
-        left: 0px;
-    }
+  &:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    background-color: $purple;
+    bottom: 0;
+    left: 0px;
+  }
 }
 
 .align {
-    &-center {
-        text-align: center;
-    }
+  &-center {
+    text-align: center;
+  }
+}
+
+.size {
+  &-large {
+    font-size: 4rem !important;
+  }
 }

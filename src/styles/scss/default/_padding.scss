@@ -6,11 +6,13 @@
     }
     //   HORIZONTALLY
     &-h-#{$i} {
-      padding: 0 (1rem * $i);
+      padding-left: (1rem * $i);
+      padding-right: (1rem * $i);
     }
     // VERTICALLY
     &-v-#{$i} {
-      padding: (1rem * $i) 0;
+      padding-top: (1rem * $i);
+      padding-bottom: (1rem * $i);
     }
     //TOP
     &-t-#{$i} {

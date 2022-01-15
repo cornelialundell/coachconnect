@@ -29,9 +29,10 @@ export const Dashboard = (props: ICoachProps) => {
       const orderedCollectionRef = query(usersCollectionRef);
       const data = await getDocs(orderedCollectionRef);
       data.docs.map((doc) => {
-        list.push({ name: doc.data().name, goals: doc.data().goals, template: doc.data().template, id: doc.id });
+        list.push({email:doc.data().email, name: doc.data().name, goals: doc.data().goals, id: doc.id});
       });
       setClients(list);
+     
   };
 
 
@@ -53,11 +54,11 @@ export const Dashboard = (props: ICoachProps) => {
           <button className="purple-btn" onClick={() => {navigate("/defaultTemplate")}}>Edit default template</button>
           <button className="purple-btn" onClick={() => {setShowInviteLink(!showInviteLink)}}>Invite customers</button>
           {showInviteLink ? (
-            <div className="row">
+            <div className="row slide-from-top">
               <p>{textToCopy}</p>
-              <button onClick={() => {navigator.clipboard.writeText(textToCopy); setIsCopied(true); setTimeout(() => setIsCopied(false), 2000)}}>Copy</button>
+              <button onClick={() => {navigator.clipboard.writeText(textToCopy); setIsCopied(true); setTimeout(() => setIsCopied(false), 1000)}}>Copy</button>
               {isCopied ? (
-                <p>Copied!</p>
+                <p className="slide-up-down">Copied!</p>
               ): (<></>)}
               </div>
           ):(

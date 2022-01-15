@@ -6,11 +6,12 @@ import { Header } from "./components/header/Header";
 import { SignIn } from "./components/signInRegister/SignInRegister";
 import Cookies from "universal-cookie";
 import { Dashboard } from "./components/dashboard/Dashboard";
-import { ClientInfo } from "./components/clientInfo/ClientInfo";
+import { ClientInfo, IClient } from "./components/clientInfo/ClientInfo";
 import { DefaultTemplate } from "./components/defaultTemplate/DefaultTemplate";
 import { auth, db } from "./firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import { ClientDashboard } from "./components/dashboard/ClientDashboard";
 
 export interface ICoach {
   username?: string;
@@ -26,7 +27,7 @@ function App() {
   const [cookie, setCookie] = useState(cookies.get("Authorization"));
   const [url, setUrl] = useState('')
   const [coach, setCoach] = useState<ICoach>();
-
+  const [client, setClient] = useState<IClient>()
   const [userLoggedIn, setUserLoggedIn] = useState(auth.currentUser)
 
   onAuthStateChanged(auth, (user) => {
@@ -53,9 +54,27 @@ function App() {
     const hejjj = (await getDoc(hej)).data();
 
     if (hejjj) {
-      
-      setCoach({username: hejjj.username, email: hejjj.email})
+        setCoach({username: hejjj.username, email: hejjj.email})
+    }
+    if (!hejjj) {
+      const getCoachRef = doc(db, 'clients', userLoggedIn.uid)
+      const clientsCoach = (await getDoc(getCoachRef)).data()
+      if (clientsCoach) {
+        const coachId = clientsCoach.coachId
+       const getClientRef = doc(db, 'coaches', coachId, 'clients', userLoggedIn.uid)
+       const currentClient = (await getDoc(getClientRef))
 
+       if (currentClient.exists()) {
+        setClient({
+          name: currentClient.data().name,
+          email: currentClient.data().email,
+          id:currentClient.id,
+          goals: currentClient.data().goals
+        })
+       }
+        
+      }
+  
     }
   }
 
@@ -64,13 +83,17 @@ useEffect(() => {
 }, [userLoggedIn])
 
  
-
   return (
     <>
       <Header url={url} checkUrl={checkUrl} cookie={cookie} coach={coach} checkLoggedIn={checkLoggedIn}/>
       <Routes>
-        {userLoggedIn ? (
+        {userLoggedIn && coach ? (
           <Route path="/" element={<Dashboard coach={coach}/>} />
+        ) : (
+          <></>
+        )}
+        {userLoggedIn && client ? (
+          <Route path="/" element={<ClientDashboard client={client}/>} />
         ) : (
           <Route path="/" element={<LandingPage />} />
         )}

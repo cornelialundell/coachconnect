@@ -1,47 +1,53 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where, updateDoc, arrayUnion, setDoc, addDoc, doc, deleteDoc} from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  updateDoc,
+  arrayUnion,
+  setDoc,
+  addDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { auth, db } from "../../firebase-config";
-
 
 interface IProps {
   field: string;
   id: string;
   coachId: string | null | undefined;
   defaultTemplate: Array<T>;
-  checkDefaultTemplate():void
-  editField(value:string, id:string):void
+  checkDefaultTemplate(): void;
+  editField(value: string, id: string): void;
 }
 
 interface T {
-    field: string
+  field: string;
 }
 
 export const Fields = (props: IProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [newField, setNewField] = useState("");
-  const coach = JSON.parse(localStorage.getItem("user") || "");
-  const [id, setId] = useState('')
-
-
-
 
   const deleteField = async () => {
-    if (!props.coachId) return
-    const fieldDoc = doc(db, 'coaches', props.coachId, 'defaultTemplate', props.id)
-    await deleteDoc(fieldDoc)
-
-props.checkDefaultTemplate()
-
-    
-  }
+    if (!props.coachId) return;
+    const fieldDoc = doc(
+      db,
+      "coaches",
+      props.coachId,
+      "defaultTemplate",
+      props.id
+    );
+    await deleteDoc(fieldDoc);
+    props.checkDefaultTemplate();
+  };
 
   const saveField = async (e: React.FormEvent) => {
     e.preventDefault();
-    props.editField(newField, props.id)
-    setIsEdit(!isEdit)
-  }
-
-
+    props.editField(newField, props.id);
+    setIsEdit(!isEdit);
+  };
 
   return (
     <div className="row p-v-1">
@@ -61,8 +67,12 @@ props.checkDefaultTemplate()
             }}
             value={newField}
           ></input>
-          <button type="submit" className="purple-btn">Save</button>
-          <button onClick={() => setIsEdit(!isEdit)} className="purple-btn">Cancel</button>
+          <button type="submit" className="purple-btn">
+            Save
+          </button>
+          <button onClick={() => setIsEdit(!isEdit)} className="purple-btn">
+            Cancel
+          </button>
         </form>
       )}
     </div>

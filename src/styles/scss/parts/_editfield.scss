@@ -1,0 +1,7 @@
+.edit-field {
+    width: 100%;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid #E3E3E3;
+    }
+}

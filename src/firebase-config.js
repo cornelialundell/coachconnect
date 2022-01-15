@@ -68,6 +68,7 @@ export const createUserDocument = async (user, username) => {
       await userRef.set({
         email,
         username,
+        role: 'coach'
       });
     
     } catch (error) {
@@ -79,12 +80,13 @@ export const createClientDocument = async (user, coachId,email, name, goals) => 
   if (!user) return;
   let template = [];
   const userRef = firestore.doc(`coaches/${coachId.paramId}/clients/${user.uid}`);
+  const clientRef = firestore.doc(`clients/${user.uid}`);
 
   const querySnapshot = await getDocs(collection(db, 'coaches', coachId.paramId, 'defaultTemplate'));
   querySnapshot.forEach((doc) => {
     template.push(doc.data())
   });
-  const templateRef = collection(db, 'coaches', coachId.paramId, 'clients', user.uid, 'template')
+  const templateRef = collection(db, 'coaches', coachId.paramId, 'clients', user.uid, 'template');
 const snapshot = await userRef.get();
   if (!snapshot.exists) {
     const { email } = user;
@@ -92,11 +94,19 @@ const snapshot = await userRef.get();
       await userRef.set({
         email,
         name,
-        goals
+        goals,
+        role: 'client',
+      });
+      await clientRef.set({
+        email,
+        name,
+        goals,
+        role: 'client',
+        coachId: coachId.paramId
       });
 
       template.map(async (item) => {
-            await addDoc(templateRef, {field: item})
+            await addDoc(templateRef, item)
           })
     
     } catch (error) {

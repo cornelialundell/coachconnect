@@ -33,7 +33,6 @@ const coachId = useParams();
         name: name,
         goals: goals,
     })
-    console.log(newClient)
     const {user} = await createUserWithEmailAndPassword(auth, email, password);
     await createClientDocument(user, coachId, email, name, goals);
 
