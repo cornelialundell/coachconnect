@@ -13,3 +13,15 @@
         width: 100% / (12 / $i);
     }
 }
+
+@media screen and (max-width: 600px) {
+
+@for $i from 1 through 12 {
+    .phone {
+        &-col-#{$i} {
+            width: 100% / (12 / $i);
+        }
+    }
+}
+}
+

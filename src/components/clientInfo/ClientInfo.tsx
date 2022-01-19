@@ -18,6 +18,7 @@ export interface IClient {
   goals: string | undefined;
   email: string | undefined;
   id: string;
+  coachId?: string;
   template?: ITemplate[];
 }
 

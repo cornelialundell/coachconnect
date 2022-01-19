@@ -24,12 +24,24 @@
 
 :root {
   font-size: 10px;
+
+  @media screen and (max-width: 800px) {
+    font-size: 8px;
+  }
 }
 
 body {
   font-family: "Poppins", sans-serif;
   background-color: $white;
+  max-width: 100vw;
+  overflow: hidden;
 }
+
+#root {
+  overflow: hidden;
+  max-width: 100vw;
+}
+
 
 img {
   width: 100%;
@@ -80,7 +92,7 @@ input {
     -o-transition: all 0.3s ease;
 }
 
-  .input:focus {
+  input:focus, textarea:focus{
     ~ label {
       position: absolute;
       font-size: 1rem;

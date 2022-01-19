@@ -1,12 +1,12 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { auth, createClientDocument } from "../../firebase-config";
 
 interface IRegisterClient {
-    email: string;
-    name: string;
-    goals: string;
+  email: string;
+  name: string;
+  goals: string;
 }
 
 export const RegisterClient = () => {
@@ -16,26 +16,30 @@ export const RegisterClient = () => {
   const [passwordRepeat, setPasswordRepeat] = useState("");
   const [goals, setGoals] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [newClient, setNewClient] = useState<IRegisterClient>()
-const coachId = useParams();
+  const [newClient, setNewClient] = useState<IRegisterClient>();
+  const coachId = useParams();
+  const navigate = useNavigate();
 
   const registerClient = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    //VALIDATION
     if (email === "" || name === "" || password === "" || goals === "") {
       setErrorMessage("Please fill out all fields");
       return;
     }
 
     setNewClient({
-        email: email,
-        name: name,
-        goals: goals,
-    })
-    const {user} = await createUserWithEmailAndPassword(auth, email, password);
+      email: email,
+      name: name,
+      goals: goals,
+    });
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     await createClientDocument(user, coachId, email, name, goals);
-
+    navigate("/");
   };
 
   const checkPasswords = () => {

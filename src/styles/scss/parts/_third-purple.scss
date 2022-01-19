@@ -1,4 +1,4 @@
-@import '../default/variables';
+@import "../default/variables";
 
 .third-purple {
   background-color: #fff;
@@ -14,6 +14,10 @@
     height: 100%;
     background-image: linear-gradient(#6c5ce7, #362e74);
     box-shadow: $box-shadow;
+
+    @media screen and (max-width: 600px) {
+      width: 0;
+    }
   }
 
   > div {

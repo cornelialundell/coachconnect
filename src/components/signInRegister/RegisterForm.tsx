@@ -2,21 +2,17 @@ import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { addDoc, collection } from "@firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import Cookies from "universal-cookie";
 import { auth, createUserDocument, db } from "../../firebase-config";
 import { IUser } from "./SignInForm";
 import { ISignProps } from "./SignInRegister";
 
 export const RegisterForm = (props: ISignProps) => {
   const navigate = useNavigate();
-  const cookies = new Cookies();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [token, setToken] = useState<string | undefined>("");
   const [currentUser, setUser] = useState<IUser>();
   const defaultTemplateList = ['hunger', 'mood', 'sleep']
-  const usersCollectionRef = collection(db, "coaches");
 
   const register = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,8 +38,6 @@ export const RegisterForm = (props: ISignProps) => {
   };
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(currentUser));
-    cookies.set("Authorization", token);
     props.checkLoggedIn();
   }, [currentUser]);
 

@@ -32,3 +32,42 @@
     }
   }
 }
+
+@media screen and (max-width: 600px) {
+  .phone {
+    &-p {
+      // PADDINING
+      @for $i from 1 through 6 {
+        &-#{$i} {
+          padding:(1rem * $i);
+        }
+        //   HORIZONTALLY
+        &-h-#{$i} {
+          padding-left: (1rem * $i);
+          padding-right: (1rem * $i);
+        }
+        // VERTICALLY
+        &-v-#{$i} {
+          padding-top: (1rem * $i);
+          padding-bottom: (1rem * $i);
+        }
+        //TOP
+        &-t-#{$i} {
+          padding-top: (1rem * $i);
+        }
+        //BOTTOM
+        &-b-#{$i} {
+          padding-bottom: (1rem * $i);
+        }
+        //LEFT
+        &-l-#{$i} {
+          padding-left: (1rem * $i);
+        }
+        //RIGHT
+        &-right-#{$i} {
+          padding-right: (1rem * $i);
+        }
+      }
+    }
+  }
+}

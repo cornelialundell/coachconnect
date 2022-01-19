@@ -44,12 +44,12 @@ export const Dashboard = (props: ICoachProps) => {
   return (
     <section className="bg-linear full-height row align-items-center">
       <div className="container-medium row justify-between">
-        <div className="col-6">
+        <div className="col-6 phone-col-12">
           <h2>
             Välkommen <span className="underline">{props.coach?.username}</span>
           </h2>
         </div>
-        <div className="col-6 bg-white p-4 box-shadow">
+        <div className="col-6 bg-white p-4 box-shadow phone-col-12">
           <div className="row justify-between">
           <button className="purple-btn" onClick={() => {navigate("/defaultTemplate")}}>Edit default template</button>
           <button className="purple-btn" onClick={() => {setShowInviteLink(!showInviteLink)}}>Invite customers</button>

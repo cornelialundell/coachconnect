@@ -3,8 +3,9 @@
 nav {
     position: fixed;
     width: 100vw;
-    padding: 2rem 3rem 0;
+    padding: 2rem 3rem 1rem;
     z-index: 99;
+    align-items: center;
 
     img {
         width: 150px;
@@ -35,4 +36,17 @@ nav {
             background-color: $purple-dark;
         }
     }
+
+    @media screen and (max-width: 600px) {
+        background-color: $purple;
+
+        a {
+            color: $white;
+        }
+      }
+}
+
+.purple  {
+    background-color: $purple;
+    box-shadow: $box-shadow;
 }

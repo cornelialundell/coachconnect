@@ -19,7 +19,7 @@ export const SignInForm = (props: ISignProps) => {
   const [user, setUser] = useState<IUser>();
   const [token, setToken] = useState<string | undefined>("");
   const navigate = useNavigate();
-  const cookies = new Cookies();
+  const [error, setError] = useState('')
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,14 +48,14 @@ export const SignInForm = (props: ISignProps) => {
       });
     } catch (error) {
       console.log(error);
+      setError('Wrong email or password')
+      return
     }
 
     navigate("/");
   };
 
   useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(user));
-    cookies.set("Authorization", token);
     props.checkLoggedIn();
   }, [user]);
 
@@ -67,6 +67,7 @@ export const SignInForm = (props: ISignProps) => {
           setEmail(e.target.value);
         }}
         value={email}
+        placeholder="email"
       ></input>
       <input
         type="password"
@@ -74,7 +75,9 @@ export const SignInForm = (props: ISignProps) => {
           setPassword(e.target.value);
         }}
         value={password}
+        placeholder="password"
       ></input>
+      <p className="clr-danger col-12">{error}</p>
       <button type="submit" className="purple-btn">
         Sign in
       </button>
